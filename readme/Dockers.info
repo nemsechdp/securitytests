@@ -1,0 +1,59 @@
+                          COMANDOS
+HBASE
+
+Pull
+docker pull nemsechdp/security:hbase
+Lanzar docker
+idH=$(docker run -d -h nemdockers -p 2181:2181 -p 60000:60000 -p 60010:60010 -p 60020:60020 -p 60030:60030 --name nemhbase nemsechdp/security:hbase)
+
+Logs docker
+docker logs $idH /
+docker logs nemhbase
+
+Parar docker
+docker exec -it $idH bash
+{docker} -> ./bin/hbase master stop
+docker stop $idH /
+docker stop nemhbase
+
+Start/Reinicio del docker*
+docker start $idH /
+docker start nemhbase
+
+Hbase Shell (Crear tablas, permisos, ..)
+docker exec -it $idH bash
+{d} /opt/hbase/bin/hbase shell
+
+Zk Cli (Permisos)
+docker exec -it $idH bash
+{d} /opt/hbase/bin/hbase zkcli
+KAFKA
+
+Pull
+docker pull nemsechdp/security:kafka_1.0.0
+Lanzar docker
+idH=$(docker run -d -t -h nemdockers -p 6667:6667 -p 2181:2181 --name nemkafka nemsechdp/security:kafka_1.0. /bin/bash -c "/etc/scriptsNem/kafkaNem-start.sh")
+
+Logs docker
+docker logs $idH /
+docker logs nemkafka
+
+Parar docker
+docker exec -it $idH bash
+{docker} ->
+./opt/kafka/kafka_2.11-1.0.0//bin/kafka-server-stop.sh
+./opt/kafka/kafka-2_11-1.0.0/bin/zookeeper-server-stop.sh
+docker stop $idH /
+docker stop nemkafka
+
+Start/Reinicio del docker*
+docker start $idH /
+docker start nemkafka
+
+Kafka Acls
+docker exec -it $idH bash
+./opt/kafka/kafka_2.11-1.0.0//bin/kafka-acls.sh
+
+Zk Cli (Permisos)
+docker exec -it $idH bash
+{d} ./opt/kafka/kafka_2.11-1.0.0//bin/zookeeper-shell.sh
