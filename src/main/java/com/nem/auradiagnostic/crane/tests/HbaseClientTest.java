@@ -47,7 +47,7 @@ public class HbaseClientTest
 				case "nemplate": 			launchHbaseNemPlate(params);
 											break;
 										
-				default: 					System.out.println("Opción no reconocida: [" + authMode + "]");										
+				default: 					System.out.println("OpciÃ³n no reconocida: [" + authMode + "]");										
 			}
 		}
 		catch (Exception e)
@@ -124,11 +124,11 @@ public class HbaseClientTest
 		try 
 		{
 			//***TEST****
-			//Crea tablas temporales. Pensado para tareas de autenticación.
-			//Modificar órden y funciones enable/disable para alterar el tipo de test
+			//Crea tablas temporales. Pensado para tareas de autenticaciÃ³n.
+			//Modificar Ã³rden y funciones enable/disable para alterar el tipo de test
 			
 			//1- list
-/*			for (HTableDescriptor d : client.getTables())
+			for (HTableDescriptor d : client.getTables())
 			{
 				String n = d.getNameAsString();
 				System.out.println(n);
@@ -141,7 +141,7 @@ public class HbaseClientTest
 					return;
 				}
 			}
-				*/
+				
 
 			//2- create
 			client.createTable(desc);					
@@ -149,7 +149,8 @@ public class HbaseClientTest
 			System.out.println("[CREATE] -> OK");
 			
 			//3- put
-//			HbaseClient.admin.disableTable(tableTest);
+			if (HbaseClient.admin.isTableEnabled(desc.getTableName()))
+				HbaseClient.admin.disableTable(tableTest);
 
 			client.put(params.Table, params.Row, params.ColumnFamilyOne);  
 			System.out.println("[WRITE] -> OK");
@@ -158,21 +159,26 @@ public class HbaseClientTest
 			//4- scan
 			if (!HbaseClient.admin.isTableEnabled(desc.getTableName()))
 				HbaseClient.admin.enableTable(tableTest);
-
 			Table tabla= HbaseClient.connection.getTable(tableTest);
 			client.printLittleScan(tabla, Bytes.toBytes(params.Row));
-			System.out.println("[READ] -> OK");
-			//*		   
+			System.out.println("[SCAN] -> OK");
+					   
 			//5- delete
-//			client.deleteData(params.Table, params.Row, params.ColumnFamilyOne);
-		
+			if (HbaseClient.admin.isTableEnabled(desc.getTableName()))
+				HbaseClient.admin.disableTable(tableTest);
+
+			client.deleteData(params.Table, params.Row, params.ColumnFamilyOne);
+			System.out.println("[DELETE_DATA] -> OK");
+
 		}
 		finally
 		{
-//			HbaseClient.admin.disableTable(tableTest);
+			if (HbaseClient.admin.isTableEnabled(desc.getTableName()))
+				HbaseClient.admin.disableTable(tableTest);
 
 			//6- delete table
-//			client.deleteTable(desc);     
+			client.deleteTable(desc);
+			System.out.println("[DELETE_TABLE] -> OK");
 		}
 	}
 
